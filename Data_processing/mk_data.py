@@ -228,67 +228,25 @@ class acoustic_simulator():
         self.save_path = os.getcwd() + '/rir'
         Path(self.save_path).mkdir(parents=True, exist_ok=True)
 
-    def get_config_for_R1(self):
-        params = dict()
-        params['c'] = 343
-        params['fs'] = 16000
-        params['L'] = [6, 6, 2.5]
-        params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []]
-        params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2]
-        params['reverberation_time'] = 0.5
-        params['nsample'] = 8192
-        return params
+    
 
-    def get_config_for_R2(self):
+    def get_config_for_819(self):
         params = dict()
         params['c'] = 343
-        params['fs'] = 16000
-        params['L'] = [8, 6, 2.5]
+        params['fs'] = 48000
+        params['L'] = [7.9, 7.0, 2.7]
         params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []]
         params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2]
         params['reverberation_time'] = 0.2
-        params['nsample'] = 8192
-        return params
-
-    def get_config_for_R3(self):
-        params = dict()
-        params['c'] = 343
-        params['fs'] = 16000
-        params['L'] = [6, 8, 2.5]
-        params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []]
-        params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2]
-        params['reverberation_time'] = 0.4
-        params['nsample'] = 8192
-        return params
-
-    def get_config_for_R4(self):
-        params = dict()
-        params['c'] = 343
-        params['fs'] = 16000
-        params['L'] = [7, 5, 3]
-        params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []]
-        params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2]
-        params['reverberation_time'] = 0.12
-        params['nsample'] = 8192
-        return params
-
-    def get_config_for_R5(self):
-        params = dict()
-        params['c'] = 343
-        params['fs'] = 16000
-        params['L'] = [5, 7, 3]
-        params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []]
-        params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2]
-        params['reverberation_time'] = 0.32
-        params['nsample'] = 8192
+        params['nsample'] = 48000
         return params
 
     def initialize_room_params(self):
         # rir set
         self.params = dict()
-        self.params['c'] = 343
-        self.params['fs'] = 16000
-        self.params['L'] = [8, 8, 6]
+        self.params['c'] = 343 # sound velocity
+        self.params['fs'] = 16000 # sampling frequency
+        self.params['L'] = [8, 8, 6] # Room dimensions
         self.params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []]
         self.params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2]
         self.params['reverberation_time'] = 0.0
@@ -415,34 +373,15 @@ class acoustic_simulator():
 
         return np.round(np.array([x, y, z]), 3)
 
-    def create_rir_NOS(self):
+    def create_rir(self):
 
         _use_par = True
 
-        # Create RIR for train (R1)
-        params = self.get_config_for_R1()
-        save_path = os.getcwd() + '/rir/tr/R1/'
+        params = self.get_config_for_819()
+        save_path = os.getcwd() + '/rir/819/'
         self.generate_rir_for_room(params, save_path)
 
-        # Create RIR for train (R2)
-        params = self.get_config_for_R2()
-        save_path = os.getcwd() + '/rir/tr/R2/'
-        self.generate_rir_for_room(params, save_path)
-
-        # Create RIR for train (R3)
-        params = self.get_config_for_R3()
-        save_path = os.getcwd() + '/rir/tr/R3/'
-        self.generate_rir_for_room(params, save_path)
-
-        # Create RIR for test (R4)
-        params = self.get_config_for_R4()
-        save_path = os.getcwd() + '/rir/tt/R4/'
-        self.generate_rir_for_room(params, save_path)
-
-        # Create RIR for test (R5)
-        params = self.get_config_for_R5()
-        save_path = os.getcwd() + '/rir/tt/R5/'
-        self.generate_rir_for_room(params, save_path)
+        
 
     def generate_rir_for_room(self, params, save_path, mode='tr'):
         # Create RIR for train (R1)
@@ -688,7 +627,7 @@ if __name__ == "__main__":
     SM = clean_source_mixer()
 
     "[1] make and save RIR (R1, R2, R3, R4, R5)"
-    AS.create_rir_NOS()
+    AS.create_rir()
     AS.generate_rir_for_room()
     exit()
 
