@@ -13,6 +13,7 @@ from tqdm import tqdm
 import shutil
 import csv
 import time
+import multiprocessing as mp
 
 class preproc_dataset():
 
@@ -235,9 +236,31 @@ class acoustic_simulator():
         params['c'] = 343
         params['fs'] = 48000
         params['L'] = [7.9, 7.0, 2.7]
-        params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []]
-        params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2]
+        params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []] # mic location
+        params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2] # source location
         params['reverberation_time'] = 0.2
+        params['nsample'] = 48000
+        return params
+
+    def get_config_for_409(self):
+        params = dict()
+        params['c'] = 343
+        params['fs'] = 48000
+        params['L'] = [4.2, 7.0, 2.7]
+        params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []] # mic location
+        params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2] # source location
+        params['reverberation_time'] = 0.25
+        params['nsample'] = 48000
+        return params
+
+    def get_config_for_by3(self):
+        params = dict()
+        params['c'] = 343
+        params['fs'] = 48000
+        params['L'] = [3.4, 8.3, 2.5]
+        params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []] # mic location
+        params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2] # source location
+        params['reverberation_time'] = 0.3
         params['nsample'] = 48000
         return params
 
@@ -307,6 +330,7 @@ class acoustic_simulator():
                                            )])
 
         fig.show()
+        
 
     def get_uniform_dist_circ_pos(self, center, radius, resolution, dim):
         """
@@ -336,12 +360,14 @@ class acoustic_simulator():
 
         return pos_mics
 
-    def generate_rir(self, src_pos):
+    def generate_rir(self, src_pos, center, n_mic, mic_type):
+       
         self.params['s'] = src_pos
-        center = (np.array(self.params['L']) / 2).tolist()
+        # center = (np.array(self.params['L']) / 2).tolist()
         azi, ele, r = self.cart2sph(src_pos - center)
         h = rir.generate(**self.params)
-        np.savez(self.save_path + 'az{}_el{}_r{}.npz'.format(int(azi), int(ele), r), rir=h, params=self.params)
+        
+        np.savez(self.save_path + '{}_n{}_az{}_el{}_r{}.npz'.format(mic_type, n_mic, int(azi), int(ele), r), rir=h, params=self.params)
 
     def cart2sph(self, position):
         x, y, z = position
@@ -373,44 +399,149 @@ class acoustic_simulator():
 
         return np.round(np.array([x, y, z]), 3)
 
-    def create_rir(self):
+    def circle_mic_pos(self):
+        pos_4=np.array([[2.8284271247461903, 0],
+                        [0, 2.8284271247461903],
+                        [-2.8284271247461903, 0],
+                        [0, -2.8284271247461903]])
 
+        pos_6=np.array([[4, 0],
+                        [2, 3.4641016151377553],
+                        [-2, 3.4641016151377557],
+                        [-4,0],
+                        [-2, -3.464101615137755],
+                        [2, -3.4641016151377553]])
+
+        pos_8=np.array([[5.226251859505506, 0],
+                        [3.6955181300451474, 3.695518130045147],
+                        [0, 5.226251859505506],
+                        [-3.695518130045147, 3.6955181300451474],
+                        [-5.226251859505506, 0],
+                        [-3.695518130045148, -3.695518130045147],
+                        [0,-5.226251859505506],
+                        [3.695518130045146, -3.695518130045148]])
+        return {4:pos_4, 6:pos_6, 8:pos_8}
+
+
+    def ellip_mic_pos(self):
+        pos_4=np.array([[2.4210, 0],
+                        [0, 3.1841],
+                        [-2.4210, 0],
+                        [0, -3.1841]])
+
+        pos_6=np.array([[4.6149, 0],
+                [2, 3.0269],
+                [-2, 3.2069],
+                [-4.6149, 0],
+                [-2, -3.2069],
+                [2, -3.0269]])
+
+       
+
+        pos_8=np.array([[5.9190, 0],
+                [2.1121, 1.0993],
+                [0, 4.5004],
+                [-2.1121, 1.0993],
+                [-5.9190, 0],
+                [-2.1121, -1.0993],
+                [0, -4.5004],
+                [2.1121, -1.0993]])
+
+        return {4:pos_4, 6:pos_6, 8:pos_8}
+    def linear_mic_pos(self):
+
+        pos_4=np.array([[0, 6],
+                        [0, 2],
+                        [0, -2],
+                        [0, -6]])
+
+        pos_6=np.array([[0,10],
+                        [0, 6],
+                        [0, 2],
+                        [0, -2],
+                        [0, -6],
+                        [0,-10]])
+
+        pos_8=np.array([[0, 14],
+                        [0,10],
+                        [0, 6],
+                        [0, 2],
+                        [0, -2],
+                        [0, -6],
+                        [0,-10],
+                        [0, -14]])
+    
+        return {4:pos_4, 6:pos_6, 8:pos_8}
+
+
+    def create_rir(self):
+        # save_name = room type _ # of mic_ r _ azi_ array type
         _use_par = True
+        n_mic=[4,6,8]
+        mic_type={'circle', 'ellipsoid', 'linear'}
+        r=[0.5, 1.0, 1.5]
+        azi=[30*i for i in range(12)]
+        circle=self.circle_mic_pos()
+        ellipsoid=self.ellip_mic_pos()
+        linear=self.linear_mic_pos()
+        mic_pos={'circle':circle, 'ellipsoid':ellipsoid, 'linear':linear}
+
 
         params = self.get_config_for_819()
-        save_path = os.getcwd() + '/rir/819/'
+        save_path = '../Data/rir/819/'
+        self.generate_rir_for_room(params, save_path, n_mic, r, azi, mic_pos, mic_type)
+
+        params = self.get_config_for_409()
+        save_path = '../Data/rir/409/'
+        self.generate_rir_for_room(params, save_path)
+
+        params = self.get_config_for_by3()
+        save_path = '../Data/rir/by3/'
         self.generate_rir_for_room(params, save_path)
 
         
 
-    def generate_rir_for_room(self, params, save_path, mode='tr'):
+    def generate_rir_for_room(self, params, save_path, n_mic_list, r_list, azi_list,mic_pos_list, mic_type_list, mode='tr'):
         # Create RIR for train (R1)
         #save_path = '/media/jeonghwan/HDD2/IS2021/dataset/Simul_DB_ULA4/simulated_RIR/tr/R1/'
         _use_par = True
 
         Path(save_path).mkdir(parents=True, exist_ok=True)
-
-        center = (np.array(params['L']) / 2).tolist()
-        mic_pos = self.get_UCA_array(center, radius=0.0325, nmic=4)
-        print(mic_pos)
-        params['r'] = mic_pos
+        center=[params['L'][0]*0.5, params['L'][1]*0.5, 0.69]        
+        
+        # params['r'] = mic_pos
         self.params = params
         self.save_path = save_path
-        # create source position list
+
         src_pos_list = []
+        for r in r_list:
+            src_pos_list += self.get_uniform_dist_circ_pos(center=center, radius=r, resolution=30, dim='2D')
 
-        # for training
-        if mode == 'tr':
-            for r in np.linspace(1, 3, 11):
-                src_pos_list += self.get_uniform_dist_circ_pos(center=center, radius=r, resolution=3, dim='2D')
+        pool = mp.Pool(8)
+        mgr = mp.Manager()
+        for n_mic in n_mic_list:
+            for mic_type in mic_type_list:
+                # print(mic_type)
+                pos=mic_pos_list[mic_type][n_mic]/100
 
-        # for test
-        elif mode == 'tt':
-            for r in np.linspace(1, 2.2, 5):
-                src_pos_list += self.get_uniform_dist_circ_pos(center=center, radius=r, resolution=1, dim='2D')
-
-        if _use_par == True:
-            _ = parmap.map(self.generate_rir, src_pos_list)
+                # print(pos)
+                # exit()
+                self.params['r']=np.pad(pos, ((0,0), (0,1)))+center
+                for source_pos in src_pos_list:
+                    # self.params['s']=source_pos
+                    pool.apply_async(
+                        self.generate_rir,
+                        args=(source_pos, center, n_mic, mic_type)
+                        )
+                    # self.generate_rir(source_pos, center, n_mic, mic_type)
+                    # exit()
+                
+        
+        pool.close()
+        pool.join()
+       
+        # if _use_par == True:
+        #     _ = parmap.map(self.generate_rir, src_pos_list)
 
 class clean_source_mixer():
 
@@ -625,10 +756,10 @@ if __name__ == "__main__":
     AS = acoustic_simulator()
     PD = preproc_dataset()
     SM = clean_source_mixer()
-
+    
     "[1] make and save RIR (R1, R2, R3, R4, R5)"
     AS.create_rir()
-    AS.generate_rir_for_room()
+    # AS.generate_rir_for_room()
     exit()
 
 
