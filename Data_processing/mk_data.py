@@ -79,7 +79,6 @@ class preproc_dataset():
     def mix_rir_and_sound_source(self, mode):
         """
         convolve speech and speech_rir (random selected)
-
         :param mode: tr/cv/tt
         :return: save multi-channel speech
         """
@@ -246,7 +245,7 @@ class acoustic_simulator():
         params = dict()
         params['c'] = 343
         params['fs'] = 48000
-        params['L'] = [4.2, 7.0, 2.7]
+        params['L'] = [7.0,4.2, 2.7]
         params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []] # mic location
         params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2] # source location
         params['reverberation_time'] = 0.25
@@ -257,7 +256,7 @@ class acoustic_simulator():
         params = dict()
         params['c'] = 343
         params['fs'] = 48000
-        params['L'] = [3.4, 8.3, 2.5]
+        params['L'] = [8.3, 3.4, 2.5]
         params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []] # mic location
         params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2] # source location
         params['reverberation_time'] = 0.3
@@ -438,14 +437,18 @@ class acoustic_simulator():
 
        
 
-        pos_8=np.array([[5.9190, 0],
-                [2.1121, 1.0993],
-                [0, 4.5004],
-                [-2.1121, 1.0993],
-                [-5.9190, 0],
-                [-2.1121, -1.0993],
-                [0, -4.5004],
-                [2.1121, -1.0993]])
+        pos_8=np.array([[5.9229, 0],
+                [3.8509, 3.4216],
+                [0, 4.5033],
+                [-3.8509, 3.4216],
+                [-5.9229, 0],
+                [-3.8509, -3.4216],
+                [0, -4.5033],
+                [3.8509, -3.4216]])
+
+
+
+
 
         return {4:pos_4, 6:pos_6, 8:pos_8}
     def linear_mic_pos(self):
@@ -454,13 +457,15 @@ class acoustic_simulator():
                         [0, 2],
                         [0, -2],
                         [0, -6]])
-
+        pos_4=np.flip(pos_4, -1)
+        
         pos_6=np.array([[0,10],
                         [0, 6],
                         [0, 2],
                         [0, -2],
                         [0, -6],
                         [0,-10]])
+        pos_6=np.flip(pos_6, -1)
 
         pos_8=np.array([[0, 14],
                         [0,10],
@@ -470,7 +475,7 @@ class acoustic_simulator():
                         [0, -6],
                         [0,-10],
                         [0, -14]])
-    
+        pos_8=np.flip(pos_8, -1)
         return {4:pos_4, 6:pos_6, 8:pos_8}
 
 
@@ -493,11 +498,11 @@ class acoustic_simulator():
 
         params = self.get_config_for_409()
         save_path = '../Data/rir/409/'
-        self.generate_rir_for_room(params, save_path)
+        self.generate_rir_for_room(params, save_path, n_mic, r, azi, mic_pos, mic_type)
 
         params = self.get_config_for_by3()
         save_path = '../Data/rir/by3/'
-        self.generate_rir_for_room(params, save_path)
+        self.generate_rir_for_room(params, save_path, n_mic, r, azi, mic_pos, mic_type)
 
         
 
@@ -521,12 +526,19 @@ class acoustic_simulator():
         mgr = mp.Manager()
         for n_mic in n_mic_list:
             for mic_type in mic_type_list:
+                mic_type='ellipsoid'
+                # mic_type='linear'
+                n_mic=8
                 # print(mic_type)
                 pos=mic_pos_list[mic_type][n_mic]/100
-
+                
                 # print(pos)
                 # exit()
                 self.params['r']=np.pad(pos, ((0,0), (0,1)))+center
+                
+                # self.visualize_pos(np.pad(pos, ((0,0), (0,1))))
+                # self.visualize_pos(self.params['r'])
+                # exit()
                 for source_pos in src_pos_list:
                     # self.params['s']=source_pos
                     pool.apply_async(
@@ -590,7 +602,6 @@ class clean_source_mixer():
         (2) calculate noise rir (=speech rir + 90/180/270 degree)
         (3) convolve noise (random selected) and noise rir
         (4) mix multi-channel speech and multi-channel noise with SNR (random selected)
-
         :param mode: tr/cv/tt
         :return: save noisy(mix), clean(s1), noise(s2) files / save 'output.csv' file
         """
@@ -670,7 +681,6 @@ class clean_source_mixer():
         (3) convolve speech(noise) and speech(noise) rir
         (4) mix multi-channel speech and multi-channel noise
         (5) room(2) * noise(4) * SNR(5)
-
         :return: save noisy(mix), clean(s1), noise(s2) files / save 'output.csv' file
         """
 
