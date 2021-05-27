@@ -522,13 +522,14 @@ class acoustic_simulator():
         for r in r_list:
             src_pos_list += self.get_uniform_dist_circ_pos(center=center, radius=r, resolution=30, dim='2D')
 
-        pool = mp.Pool(8)
-        mgr = mp.Manager()
+        
+        # mgr = mp.Manager()
         for n_mic in n_mic_list:
             for mic_type in mic_type_list:
-                mic_type='ellipsoid'
+                print(n_mic, mic_type)
+                # mic_type='ellipsoid'
                 # mic_type='linear'
-                n_mic=8
+                # n_mic=8
                 # print(mic_type)
                 pos=mic_pos_list[mic_type][n_mic]/100
                 
@@ -537,20 +538,18 @@ class acoustic_simulator():
                 self.params['r']=np.pad(pos, ((0,0), (0,1)))+center
                 
                 # self.visualize_pos(np.pad(pos, ((0,0), (0,1))))
-                # self.visualize_pos(self.params['r'])
+                # # self.visualize_pos(self.params['r'])
                 # exit()
+                pool = mp.Pool(8)
                 for source_pos in src_pos_list:
                     # self.params['s']=source_pos
                     pool.apply_async(
                         self.generate_rir,
                         args=(source_pos, center, n_mic, mic_type)
-                        )
-                    # self.generate_rir(source_pos, center, n_mic, mic_type)
-                    # exit()
-                
+                        )               
         
-        pool.close()
-        pool.join()
+                pool.close()
+                pool.join()
        
         # if _use_par == True:
         #     _ = parmap.map(self.generate_rir, src_pos_list)
