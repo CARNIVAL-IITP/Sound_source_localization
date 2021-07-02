@@ -233,34 +233,34 @@ class acoustic_simulator():
     def get_config_for_819(self):
         params = dict()
         params['c'] = 343
-        params['fs'] = 48000
+        params['fs'] = 16000
         params['L'] = [7.9, 7.0, 2.7]
         params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []] # mic location
         params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2] # source location
         params['reverberation_time'] = 0.2
-        params['nsample'] = 48000
+        params['nsample'] = 16000
         return params
 
     def get_config_for_409(self):
         params = dict()
         params['c'] = 343
-        params['fs'] = 48000
+        params['fs'] = 16000
         params['L'] = [7.0,4.2, 2.7]
         params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []] # mic location
         params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2] # source location
         params['reverberation_time'] = 0.25
-        params['nsample'] = 48000
+        params['nsample'] = 16000
         return params
 
     def get_config_for_by3(self):
         params = dict()
         params['c'] = 343
-        params['fs'] = 48000
+        params['fs'] = 16000
         params['L'] = [8.3, 3.4, 2.5]
         params['r'] = []  # self.get_UCA_array(center=center, r=0.04, nmic=4, visualization=True)  # [[], [], [], []] # mic location
         params['s'] = []  # [2, 3.5, 2] # self.get_src_pos(center=[], n_resol=)#[2, 3.5, 2] # source location
         params['reverberation_time'] = 0.3
-        params['nsample'] = 48000
+        params['nsample'] = 16000
         return params
 
     def initialize_room_params(self):
