@@ -1,0 +1,7 @@
+1s rir
+using only 200ms ~ 500ms
+
+azi 0:30:330
+ele 0:15:45 - use only 0, 15, 30
+
+csv: divide tr, cv, tt

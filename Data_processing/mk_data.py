@@ -347,8 +347,13 @@ class acoustic_simulator():
         if dim == '3D':
             azi_list = np.arange(0, 360, resolution[0])
             ele_list = np.arange(0, 60+resolution[1], resolution[1])
-            ele_list = ele_list[ele_list <= 90]
+            # print(ele_list)
+            # exit()
+            # ele_list = ele_list[ele_list <= 90]
             #ele_list = np.linspace(0, 90, resolution[1])
+            ele_list=ele_list[:-1]
+            # print(ele_list)
+            # exit()
         else:
             azi_list = np.arange(0, 360, resolution)
             ele_list = [0]
@@ -519,9 +524,12 @@ class acoustic_simulator():
         self.save_path = save_path
 
         src_pos_list = []
+        
         for r in r_list:
-            src_pos_list += self.get_uniform_dist_circ_pos(center=center, radius=r, resolution=30, dim='2D')
+            src_pos_list += self.get_uniform_dist_circ_pos(center=center, radius=r, resolution=[30,15], dim='3D')
 
+        # print(len(src_pos_list))
+        # exit()
         
         # mgr = mp.Manager()
         for n_mic in n_mic_list:
@@ -540,12 +548,12 @@ class acoustic_simulator():
                 # self.visualize_pos(np.pad(pos, ((0,0), (0,1))))
                 # # self.visualize_pos(self.params['r'])
                 # exit()
-                pool = mp.Pool(8)
+                pool = mp.Pool(6)
                 for source_pos in src_pos_list:
                     # self.params['s']=source_pos
                     pool.apply_async(
                         self.generate_rir,
-                        args=(source_pos, center, n_mic, mic_type)
+                        args=(source_pos, center, n_mic, mic_type), 
                         )               
         
                 pool.close()
