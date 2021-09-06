@@ -1,0 +1,47 @@
+room_819:
+  c: 343
+  fs: 16000
+  L: [7.9, 7.0, 2.7]
+  r: []
+  s: []
+  reverberation_time: 0.2
+  nsample: 0
+
+
+room_s1:
+  c: 343
+  fs: 16000
+  L: [6.8, 6.8, 2.8]
+  r: []
+  s: []
+  reverberation_time: 0.225
+  nsample: 0
+
+room_409:
+  c: 343
+  fs: 16000
+  L: [7.0, 4.2, 2.7]
+  r: []
+  s: []
+  reverberation_time: 0.25
+  nsample: 0
+
+room_s2:
+  c: 343
+  fs: 16000
+  L: [8.0, 4.1, 2.6]
+  r: []
+  s: []
+  reverberation_time: 0.275
+  nsample: 0
+
+room_by3:
+  c: 343
+  fs: 16000
+  L: [8.3, 3.4, 2.5]
+  r: []
+  s: []
+  reverberation_time: 0.3
+  nsample: 0
+  
+

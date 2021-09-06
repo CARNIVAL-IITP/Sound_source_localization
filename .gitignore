@@ -2,3 +2,5 @@
 *.npz
 *.wav
 ./Data
+*.csv
+./Data_processing

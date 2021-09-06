@@ -4,4 +4,10 @@ using only 200ms ~ 500ms
 azi 0:30:330
 ele 0:15:45 - use only 0, 15, 30
 
+
+rir
+
+s1, 409: test
+819, 409, s2: tr/cv
+
 csv: divide tr, cv, tt
