@@ -20,10 +20,10 @@ def main():
     data_dict={'audio_directory':[],'speaker':[], 'gender':[], 'VAD_directory':[], 'length':[]}
     
     
-    dict02_dir='/data/Dataset/sitec/Dict02/clncut/'
-    dict01_dir='/data/Dataset/sitec/Dict01/clncut/'
+    dict02_dir='/root/harddrive/Dataset/Dataset/sitec/Dict02/clncut/'
+    dict01_dir='/root/harddrive/Dataset/Dataset/sitec/Dict01/clncut/'
     data_dir_list=[dict01_dir, dict02_dir]
-    vad_dir='/data/Dataset/sitec/VAD_by_sample/'
+    vad_dir='/root/harddrive/Dataset/Dataset/sitec/VAD_by_sample/'
     vad_list_generate=pathlib.Path(vad_dir).rglob('*.mat')
 
     vad_dir_list=[str(i) for i in vad_list_generate]
@@ -67,7 +67,7 @@ def rir_plot(data):
 
 
 def rir_csv():
-    rir_dir='/home/intern0/Desktop/project/IITP/Sound_source_localization/Data_processing/speech_setup/rir_gen/rir/'
+    rir_dir='./rir_gen/rir/'
     room_list=os.listdir(rir_dir)
     # data_dict={'rir_directory':[],'azi':[], 'ele':[], 'r':[], 'shape':[], 'mic_num':[], 'room':[]}
     train_dict={'rir_directory':[],'azi':[], 'ele':[], 'r':[], 'shape':[], 'mic_num':[], 'room':[]}
@@ -79,7 +79,8 @@ def rir_csv():
         direc=rir_dir+room+'/'
         # print(direc)
         rir_list=glob.glob(direc+'*.npz')
-
+        
+        # exit()
         if room in ['room_s1', 'room_409']:
             data_dict=test_dict
         else:
@@ -174,11 +175,6 @@ def audio_split():
     for speaker in ori_speaker_list:
         if speaker not in speaker_list:
             speaker_list.append(speaker)
-
-
-
-
-    # speaker_list=list(set(ori_speaker_list))
     
     small_length_speaker=speaker_list[:400]
     
@@ -260,6 +256,8 @@ def synthesize_reverb(mode):
         out_csv='tt.csv'
 
     del rir_csv['Unnamed: 0']
+    # print(noise_csv)
+    # exit()
    
     audio_csv=sklearn.utils.shuffle(audio_csv)
     rir_csv=sklearn.utils.shuffle(rir_csv)
@@ -284,7 +282,7 @@ def synthesize_reverb(mode):
 
         
         audio_rir_file=np.load(rir['rir_directory'])['rir']
-
+        
         room=rir['room']
         noise_rir=rir_csv.drop([num%len_rir], axis=0)   
         noise_rir=noise_rir.loc[rir_csv['room']==room]
@@ -329,8 +327,11 @@ def synthesize_reverb(mode):
         
         for n in range(audio_rir_file.shape[-1]):
             
-            audio_rired=oaconvolve(audio_file, audio_rir_file[:,n])
-            noise_rired=oaconvolve(noise_file, noise_rir_file[:,n])
+            audio_rired=oaconvolve(audio_file, audio_rir_file[:,n], mode='full')
+            noise_rired=oaconvolve(noise_file, noise_rir_file[:,n], mode='full')
+            audio_rired=audio_rired[:audio_file.shape[0],]
+            noise_rired=noise_rired[:audio_file.shape[0],]
+         
             if first==True:
                 sf.write(output_name, audio_rired, fs)
                 snr_mul=snr_count(audio_rired, noise_rired, SNR)
@@ -343,7 +344,7 @@ def synthesize_reverb(mode):
                 
             else:
                 result[:, n]=audio_rired+noise_rired*snr_mul
-       
+        
         sf.write(input_name, result, fs)
         # break
         # exit()
@@ -353,14 +354,16 @@ def synthesize_reverb(mode):
 
 if __name__=='__main__':  
     # main()
+    
     # audio_split()
     # rir_csv()
-    # test_path='/data/Dataset/MS-SNSD/noise_test/'
-    # trcv_path='/data/Dataset/MS-SNSD/noise_train/'
-    # # noise_list(test_path,'./noise_test.csv', 'tt' )
-    # noise_list(trcv_path,['./noise_train.csv', './noise_cv.csv'], 'tr' )
+    test_path='/root/harddrive/Dataset/Dataset/MS-SNSD/noise_test/'
+    trcv_path='/root/harddrive/Dataset/Dataset/MS-SNSD/noise_train/'
 
-    # exit()
+    noise_list(test_path,'./noise_test.csv', 'tt' )
+    noise_list(trcv_path,['./noise_train.csv', './noise_cv.csv'], 'tr' )
+
+  
 
     synthesize_reverb('tr')
     synthesize_reverb('cv')
