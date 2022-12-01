@@ -1,0 +1,59 @@
+name: Causal_CRN_SPL_target
+degree_resolution: 1
+
+ref_ch: 0
+
+##### sigma
+p: 0.707106781
+wait_epoch: 0
+sigma_start: [6.0]
+sigma_end: 
+  min: [2.5]
+  max: [6.0]
+  # min: [0.05]
+
+sigma_rate: [-0.07]
+sigma_update_method: 'add'
+
+iter:
+  update: False
+  update_period: 200
+
+epoch:
+  update: True
+  update_period: 1
+
+
+max_spk: 4
+
+FFT:
+  win_len: 256
+  win_inc: 128
+  fft_len: 256
+
+CRN:
+
+  input_audio_channel: 8
+  fft_freq_bin_num: 129
+
+  CNN:
+    layer_num: 4
+    kernel_size: [3,3] # F X T
+    filter: 64
+
+    max_pool:
+      kernel_size: [2,1]
+      stride: [2,1]
+  
+  GRU:
+    input_size: 512
+    hidden_size: 256
+    num_layers: 3
+    batch_first: True
+    dropout: 0.0
+
+  GRU_init:
+    shape: [3,1,  256]
+    learnable: False
+    
+  

@@ -1,0 +1,15 @@
+wandb:
+  wandb_ok: False
+  init:
+    project: 
+    entity: 
+    name: 
+    
+optimize_method: 'min'
+
+save_csv: ../results/logger/log.csv
+png_dir: ../results/logger/loss.png
+
+model_save_dir: ../results/model_checkpoint/
+out_txt:
+  dir: ../results/logger/exp.txt

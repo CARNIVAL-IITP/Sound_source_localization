@@ -1,0 +1,124 @@
+'409': # input of gpu rir
+  config_dict:
+    room_sz: [7.0, 4.2, 2.7]
+    beta: 
+    pos_src: 
+    pos_rcv: [3.5, 2.1, 0.7]
+    nb_img:
+    Tmax: 0.22
+    fs: 16000.0
+    c: 343.0
+    mic_pattern: omni 
+
+  noise: Typing_1.wav
+
+
+  
+  
+'819': # input of gpu rir
+  config_dict:
+    room_sz: [7.0, 7.0, 2.7]
+    beta: 
+    pos_src: 
+    pos_rcv: [3.95, 3.5, 0.7]
+    nb_img:
+    Tmax: 0.2
+    fs: 16000.0
+    c: 343.0
+    
+    mic_pattern: omni 
+
+  noise: AirConditioner_1.wav
+
+
+
+meeting: # input of gpu rir
+  config_dict:
+    room_sz: [8.5, 7.2, 2.9]
+    beta: 
+    pos_src: 
+    pos_rcv: [4.25, 3.6, 0.7]
+    nb_img:
+    Tmax: 0.24
+    fs: 16000.0
+    c: 343.0
+    
+    mic_pattern: omni 
+
+  noise: CopyMachine_1.wav
+
+seminar: # input of gpu rir
+  config_dict:
+    room_sz: [10.0, 8.5, 3.5]
+    beta: 
+    pos_src: 
+    pos_rcv: [5.0, 4.25, 0.7]
+    nb_img:
+    Tmax: 0.26
+    fs: 16000.0
+    c: 343.0
+    
+    mic_pattern: omni 
+
+  noise: AirConditioner_2.wav
+
+house: # input of gpu rir
+  config_dict:
+    room_sz: [6.8, 6.8, 2.3]
+    beta: 
+    pos_src: 
+    pos_rcv: [3.4, 3.4, 0.7]
+    nb_img:
+    Tmax: 0.28
+    fs: 16000.0
+    c: 343.0
+    
+    mic_pattern: omni 
+
+  noise: VacuumCleaner_1.wav
+
+hospital: # input of gpu rir
+  config_dict:
+
+    room_sz: [4.4, 3.0, 3.0]
+    beta: 
+    pos_src: 
+    pos_rcv: [2.2, 1.5, 0.7]
+    nb_img:
+    Tmax: 0.3
+    fs: 16000.0
+    c: 343.0
+    
+    mic_pattern: omni 
+
+  noise: AirportAnnouncements_1.wav
+
+cafe: # input of gpu rir
+  config_dict:
+    room_sz: [9.2, 7.8, 3.2]
+    beta: 
+    pos_src: 
+    pos_rcv: [4.6, 3.9, 0.7]
+    nb_img:
+    Tmax: 0.45
+    fs: 16000.0
+    c: 343.0
+    
+    mic_pattern: omni 
+
+  noise: Babble_1.wav
+
+car: # input of gpu rir
+  config_dict:
+    room_sz: [2.5, 1.4, 1.0]
+    beta: 
+    pos_src: 
+    pos_rcv: [1.25, 0.7, 0.7]
+    nb_img:
+    Tmax: 0.15
+    fs: 16000.0
+    c: 343.0
+    
+    mic_pattern: omni 
+  
+  noise: Car_1.wav

@@ -1,0 +1,28 @@
+optimizer:
+  type: Adam
+  gradient_clip: 5
+  config:
+    lr: 1.0e-3
+    weight_decay: 1.0e-6
+
+
+optimizer_scheduler:
+  type: ReduceLROnPlateau
+  config:
+    mode: 'min'
+    factor: 0.9
+    patience: 0
+    threshold: 1.0e-8
+    min_lr: 1.0e-4
+    verbose: True
+    
+loss: 
+  optimize_method: 'min'
+  type: BCEWithLogitsLoss
+
+  option:
+    train_map_num: [0]
+    each_layer_weight: [1.0]
+
+
+
