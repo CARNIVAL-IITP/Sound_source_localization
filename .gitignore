@@ -1,6 +1,14 @@
 *.npy
 *.npz
 *.wav
-./Data
 *.csv
-./Data_processing
+*.txt
+*.tar
+*.pt
+*.pth
+*.pyc
+/**/wandb/
+/**/results/
+*.png
+*.pkl
+*.gif`
