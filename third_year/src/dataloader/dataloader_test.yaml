@@ -1,0 +1,26 @@
+test:
+
+  pkl_dir: /test_DB/circular_4/
+
+
+  metadata_dir: ./metadata/
+  noise_csv: ms-snsd_test.csv
+  speech_csv: librispeech_test.csv
+  pkl_csv: test_csv.csv
+
+  room_yaml: ./dataloader/dataloader_test.yaml
+  
+  ans_azi: 0
+  degree_resolution: 1
+
+  mic_type: circular # circular,. ellipsoid, linear
+  mic_num: 4 # 4, 6, 8
+  max_n_mic: 8
+
+  dataloader_dict:
+    batch_size: 1
+    shuffle: False
+    num_workers: 4
+    drop_last: False
+
+

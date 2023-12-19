@@ -1,0 +1,18 @@
+room_name: # seminar
+audio_len: # 64000
+SNR: # 0 - 40
+normalize_factor: #
+
+spk:
+  0:
+    audio_file:
+    posistion:
+    SNR_with_0: 0
+    start_point: 0
+
+  1:
+    audio_file:
+    posistion:
+    SNR_with_0: 0
+    start_point: 
+  

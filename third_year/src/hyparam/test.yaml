@@ -1,0 +1,19 @@
+torch_start_method: 'fork'
+randomseed: 0
+
+
+resolution: 1
+acc_threshold: 10
+local_maximum_distance: 30
+
+model: '../results/model_checkpoint/best_model.tar'
+
+result_folder: 
+  room_type: ['409', '819', 'meeting', 'seminar', 'house', 'hospital', 'cafe', 'car']
+
+  inference_folder: '../results/inference_best/'
+  
+
+
+GPGPU:
+  device_ids: [0]

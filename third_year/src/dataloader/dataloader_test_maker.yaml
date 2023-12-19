@@ -1,0 +1,157 @@
+test:
+  noise_dir: /MS_SNSD/test/
+
+  pkl_dir: /IITP_2023/SSL/test_DB/circular_4/
+
+
+
+
+  vad_dir: /Official/sitec/vad/
+  speech_dir: /Official/
+
+  quantity: 200
+
+  metadata_dir: ./metadata/
+  noise_csv: noise_test.csv
+  speech_csv: test_audio_list.csv
+  pkl_csv: test_csv.csv
+ 
+
+  ans_azi: 0
+  degree_resolution: 1
+
+  dataloader_dict:
+    batch_size: 1 
+    shuffle: False
+    num_workers: 0
+    drop_last: True
+
+
+  mic_type: circle # circle, ellipsoid, linear
+  mic_num: 4 # 4, 6, 8
+  max_spk: 2
+  speech_least_chunk_size: 32000
+
+  SNR: [0, 40]
+  spk_SNR: [-5, 5]
+  without_coherent_noise: [1.0, 0.0]
+  white_noise_snr: [5, 70]
+  normalize_factor: [0.004, 1.0]
+  fs: 16000
+  duration: 64000 # 4s
+  early_reverb: 40 # ms  
+  
+  
+  gpu_rir_characteristic: 
+      
+
+      
+    azi_gap: 30
+
+    array_pos: 
+      x: [0.1, 0.9]
+      y: [0.1, 0.9]
+      z: [0.1, 0.5]
+    mic:
+      rotation: True
+  
+      mic_height: [0.3, 1.2]
+      mic_from_wall: 0.2
+
+    ref_vec: 0
+    room:
+      distance: [0.3, 2.0] # m
+      azimuth: [0, 360, 1] # start, end, unit # degree
+      elevation: [30, 100, 1]   
+
+    gpu_rir_generate_dict: # input of gpu rir
+      room_sz:
+      beta:
+      pos_src:
+      pos_rcv:
+      nb_img:
+      Tmax:
+      fs: 16000.0
+      c: 343.0
+      # orV_rcv: None
+      mic_pattern: omni 
+
+
+val:
+  noise_dir: /MS_SNSD/cv/
+
+
+
+  pkl_dir: /IITP_2023/SSL/val_DB/circular_4/
+  
+  vad_dir: /Official/sitec/vad/
+  speech_dir: /Official/
+
+  quantity: 1000
+
+
+
+
+  metadata_dir: ./metadata/
+  noise_csv: noise_cv.csv
+  speech_csv: cv_audio_list.csv
+  pkl_csv: val_csv.csv
+
+  ans_azi: 0
+  degree_resolution: 1
+
+  dataloader_dict:
+    batch_size: 1 #16
+    shuffle: False
+    num_workers: 0 # 6
+    drop_last: False
+
+  mic_type: circular # circular, ellipsoid, linear
+  mic_num: 4 # 4, 6, 8
+  max_spk: 2
+  speech_least_chunk_size: 32000
+
+  SNR: [0, 40]
+  spk_SNR: [-5, 5]
+  without_coherent_noise: [1.0, 0.0]
+  white_noise_snr: [5, 70]
+  normalize_factor: [0.004, 1.0]
+  fs: 16000
+  duration: 64000 # 4s
+  early_reverb: 40 # ms  
+  
+  
+  gpu_rir_characteristic: 
+      
+    rt60_bound: [0.2, 1.3]
+    abs_weights_bound: [0.5, 1.0]
+    room_sz_bound: [[2.5, 2.5, 2.5], [15.0, 15.0, 7.0]]
+      
+    azi_gap: 30
+
+    array_pos: 
+      x: [0.1, 0.9]
+      y: [0.1, 0.9]
+      z: [0.1, 0.5]
+    mic:
+      rotation: True
+      mic_height: [0.3, 1.2]
+      mic_from_wall: 0.2
+
+    ref_vec: 0
+    room:
+      distance: [0.3, 2.0] # m
+      azimuth: [0, 360, 1] # start, end, unit # degree
+      elevation: [30, 100, 1]   
+
+    gpu_rir_generate_dict: # input of gpu rir
+      room_sz:
+      beta:
+      pos_src:
+      pos_rcv:
+      nb_img:
+      Tmax:
+      fs: 16000.0
+      c: 343.0
+      # orV_rcv: None
+      mic_pattern: omni 
